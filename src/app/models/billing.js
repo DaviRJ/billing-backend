@@ -9,7 +9,7 @@ const billingSchema = new mongoose.Schema({
         type: Number,
         min: 1,
         max: 12,
-        required: True
+        required: true
     },
     yaer: {
         type: Number, 

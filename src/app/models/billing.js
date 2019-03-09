@@ -11,7 +11,7 @@ const billingSchema = new mongoose.Schema({
         max: 12,
         required: true
     },
-    yaer: {
+    year: {
         type: Number,
         min: 1960,
         max: 2999,

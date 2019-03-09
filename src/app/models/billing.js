@@ -28,7 +28,11 @@ const billingSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "debt"
         }
-    ]
+    ],
+    created_at: {
+        type: Date,
+        default: Date.now()
+    }
 });
 
 const Billing = mongoose.model("billing", billingSchema);

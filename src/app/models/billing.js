@@ -1,32 +1,36 @@
-const mongoose = require('../../database/database')
+const mongoose = require("../../database/database");
 
 const billingSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        required: true
     },
-    month:{
+    month: {
         type: Number,
         min: 1,
         max: 12,
         required: true
     },
     yaer: {
-        type: Number, 
+        type: Number,
         min: 1960,
         max: 2999,
         required: true
     },
-    credits: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'credit'
-    }],
-    debts: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'debt'
-    }]
-})
+    credits: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "credit"
+        }
+    ],
+    debts: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "debt"
+        }
+    ]
+});
 
-const Billing = mongoose.model('billing', billingSchema);
+const Billing = mongoose.model("billing", billingSchema);
 
 module.exports = Billing;

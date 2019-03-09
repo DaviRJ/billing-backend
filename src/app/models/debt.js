@@ -1,9 +1,9 @@
-const mongoose = require('../../database/database')
+const mongoose = require("../../database/database");
 
 const debtSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        required: true
     },
     value: {
         type: Number,
@@ -14,10 +14,10 @@ const debtSchema = new mongoose.Schema({
         type: String,
         required: false,
         uppercase: true,
-        enum: ['PAGO', 'PENDENTE', 'AGENDADO']
+        enum: ["PAGO", "PENDENTE", "AGENDADO"]
     }
-})
+});
 
-const Debt = mongoose.model('debt', debtSchema);
+const Debt = mongoose.model("debt", debtSchema);
 
 module.exports = Debt;

@@ -3,6 +3,8 @@ const Billing = require("../models/billing");
 const Credit = require("../models/credit");
 const Debt = require("../models/debt");
 
+const BillingService = require("../services/billing_service");
+
 //Create
 router.post("/", async (req, res) => {
     try {
@@ -97,9 +99,7 @@ router.delete("/:id", async (req, res) => {
 
 //List
 router.get("/", async (req, res) => {
-    const billings = await Billing.find()
-        .populate("debts")
-        .populate("credits");
+    const billings = await BillingService.getList();
 
     return res.status(200).send(billings);
 });

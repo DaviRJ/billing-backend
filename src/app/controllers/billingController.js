@@ -3,6 +3,7 @@ const Billing = require("../models/billing");
 const Credit = require("../models/credit");
 const Debt = require("../models/debt");
 
+//Create
 router.post("/", async (req, res) => {
     try {
         const { name, year, month, credits, debts } = req.body;
@@ -36,12 +37,43 @@ router.post("/", async (req, res) => {
     }
 });
 
+//Read
 router.get("/:id", async (req, res) => {
-    const billing = await Billing.findById(billingId);
+    const billingId = req.params.id;
+    const billing = await Billing.findById(billingId)
+        .populate("credits")
+        .populate("debts");
 
     return res.status(200).send(billing);
 });
 
+//Update
+router.put("/:id", async (req, res) => {
+    if (!req.params.id) {
+        return res
+            .status(400)
+            .send({ error: "Cant update", message: "id not provided" });
+    }
+
+    try {
+        const billingId = req.params.id;
+
+        const updatedBilling = await Billing.findByIdAndUpdate(
+            billingId,
+            req.body
+        )
+            .populate("credits")
+            .populate("debts");
+
+        return res.status(200).send(updatedBilling);
+    } catch (err) {
+        return res
+            .status(400)
+            .send({ error: "Cant update", message: "id not provided" });
+    }
+});
+
+//List
 router.get("/", async (req, res) => {
     const billings = await Billing.find()
         .populate("debts")

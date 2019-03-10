@@ -17,6 +17,22 @@ class BillingRepository {
 
         return promisseToReturn;
     }
+
+    getOneById(id) {
+        const promisseToReturn = new Promise((resolve, reject) => {
+            try {
+                const billing = Billing.findById(id)
+                    .populate("debts")
+                    .populate("credits");
+
+                resolve(billing);
+            } catch (err) {
+                reject(err);
+            }
+        });
+
+        return promisseToReturn;
+    }
 }
 
 module.exports = new BillingRepository();

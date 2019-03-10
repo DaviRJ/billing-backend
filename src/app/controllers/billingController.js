@@ -41,12 +41,12 @@ router.post("/", async (req, res) => {
 
 //Read
 router.get("/:id", async (req, res) => {
-    const billingId = req.params.id;
-    const billing = await Billing.findById(billingId)
-        .populate("credits")
-        .populate("debts");
-
-    return res.status(200).send(billing);
+    try {
+        const billing = await BillingService.getOneById(req.params.id);
+        return res.status(200).send(billing || {});
+    } catch (err) {
+        return res.status(400).send({ error: err.message });
+    }
 });
 
 //Update
@@ -91,17 +91,18 @@ router.delete("/:id", async (req, res) => {
 
         return res.status(200).send(deleted);
     } catch (err) {
-        return res
-            .status(400)
-            .send({ error: "Cant delete", message: err.message });
+        return res.status(400).send({ error: err.message });
     }
 });
 
 //List
 router.get("/", async (req, res) => {
-    const billings = await BillingService.getList();
-
-    return res.status(200).send(billings);
+    try {
+        const billings = await BillingService.getList();
+        return res.status(200).send(billings);
+    } catch (err) {
+        return res.status(400).send({ error: err.message });
+    }
 });
 
 module.exports = app => app.use("/billing", router);

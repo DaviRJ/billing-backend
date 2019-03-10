@@ -69,7 +69,29 @@ router.put("/:id", async (req, res) => {
     } catch (err) {
         return res
             .status(400)
-            .send({ error: "Cant update", message: "id not provided" });
+            .send({ error: "Cant update", message: err.message });
+    }
+});
+
+//Delete
+router.delete("/:id", async (req, res) => {
+    if (!req.params.id) {
+        return res
+            .status(400)
+            .send({ error: "Cant delete", message: "id not provided" });
+    }
+
+    const billingId = req.params.id;
+
+    const deleted = await Billing.findByIdAndDelete(billingId);
+
+    return res.status(200).send(deleted);
+
+    try {
+    } catch (err) {
+        return res
+            .status(400)
+            .send({ error: "Cant delete", message: err.message });
     }
 });
 

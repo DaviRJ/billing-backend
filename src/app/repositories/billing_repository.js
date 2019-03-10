@@ -37,31 +37,29 @@ class BillingRepository {
     }
 
     deleteOneById(id) {
-        const promiseToReturn = new Promise((resolve, reject) => {
+        const promiseToReturn = new Promise(async (resolve, reject) => {
             try {
-                Billing.findById(id, async (err, billing) => {
-                    if (err) reject(err);
+                const billing = await Billing.findById(id);
 
-                    const { credits, debts } = billing;
+                const { credits, debts } = billing;
 
-                    if (credits) {
-                        await Promise.all(
-                            credits.map(async credit => {
-                                await Credit.findByIdAndRemove(credit._id);
-                            })
-                        );
-                    }
+                if (credits) {
+                    await Promise.all(
+                        credits.map(async credit => {
+                            await Credit.findByIdAndRemove(credit._id);
+                        })
+                    );
+                }
 
-                    if (debts) {
-                        await Promise.all(
-                            debts.map(async debt => {
-                                await Debt.findByIdAndRemove(debt._id);
-                            })
-                        );
-                    }
+                if (debts) {
+                    await Promise.all(
+                        debts.map(async debt => {
+                            await Debt.findByIdAndRemove(debt._id);
+                        })
+                    );
+                }
 
-                    billing.remove();
-                });
+                billing.remove();
 
                 resolve(true);
             } catch (err) {

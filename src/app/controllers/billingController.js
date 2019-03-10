@@ -13,26 +13,32 @@ router.post("/", async (req, res) => {
         const billing = await Billing.create({ name, year, month });
 
         //Percorrendo créditos para criação
-        await Promise.all(
-            credits.map(async credit => {
-                const createdCredit = await Credit.create(credit);
-                billing.credits.push(createdCredit);
-            })
-        );
+        if (credits) {
+            await Promise.all(
+                credits.map(async credit => {
+                    const createdCredit = await Credit.create(credit);
+                    billing.credits.push(createdCredit);
+                })
+            );
+        }
 
         //Percorrendo débitos para criação
-        await Promise.all(
-            debts.map(async debt => {
-                const createdDebt = await Debt.create(debt);
-                billing.debts.push(createdDebt);
-            })
-        );
+        if (debts) {
+            await Promise.all(
+                debts.map(async debt => {
+                    const createdDebt = await Debt.create(debt);
+                    billing.debts.push(createdDebt);
+                })
+            );
+        }
 
         //salvando pagamento com os novos creditos
         await billing.save();
 
         return res.status(200).send(billing);
     } catch (error) {
+        if (billing) await billing.remove();
+
         return res
             .status(400)
             .send({ error: "Creation failed", message: error.message });
@@ -82,12 +88,13 @@ router.delete("/:id", async (req, res) => {
             .status(400)
             .send({ error: "Cant delete", message: "id not provided" });
     }
+
     try {
         const billingId = req.params.id;
 
-        const deleted = await BillingService.deleteOneById(billingId);
+        const success = await BillingService.deleteOneById(billingId);
 
-        return res.status(200).send(deleted);
+        return res.status(200).send({ success });
     } catch (err) {
         return res.status(400).send({ error: err.message });
     }

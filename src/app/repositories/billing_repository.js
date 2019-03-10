@@ -1,4 +1,6 @@
 const Billing = require("../models/billing");
+const Debt = require("../models/debt");
+const Credit = require("../models/credit");
 const mongoose = require("../../database/database");
 
 class BillingRepository {
@@ -37,10 +39,31 @@ class BillingRepository {
     deleteOneById(id) {
         const promiseToReturn = new Promise((resolve, reject) => {
             try {
-                const deleted = Billing.findByIdAndDelete(id)
-                    .populate("credits")
-                    .populate("debts");
-                resolve(deleted);
+                Billing.findById(id, async (err, billing) => {
+                    if (err) reject(err);
+
+                    const { credits, debts } = billing;
+
+                    if (credits) {
+                        await Promise.all(
+                            credits.map(async credit => {
+                                await Credit.findByIdAndRemove(credit._id);
+                            })
+                        );
+                    }
+
+                    if (debts) {
+                        await Promise.all(
+                            debts.map(async debt => {
+                                await Debt.findByIdAndRemove(debt._id);
+                            })
+                        );
+                    }
+
+                    billing.remove();
+                });
+
+                resolve(true);
             } catch (err) {
                 reject(err);
             }

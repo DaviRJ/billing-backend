@@ -33,6 +33,21 @@ class BillingRepository {
 
         return promisseToReturn;
     }
+
+    deleteOneById(id) {
+        const promiseToReturn = new Promise((resolve, reject) => {
+            try {
+                const deleted = Billing.findByIdAndDelete(id)
+                    .populate("credits")
+                    .populate("debts");
+                resolve(deleted);
+            } catch (err) {
+                reject(err);
+            }
+        });
+
+        return promiseToReturn;
+    }
 }
 
 module.exports = new BillingRepository();

@@ -85,9 +85,7 @@ router.delete("/:id", async (req, res) => {
     try {
         const billingId = req.params.id;
 
-        const deleted = await Billing.findByIdAndDelete(billingId)
-            .populate("credits")
-            .populate("debts");
+        const deleted = await BillingService.deleteOneById(billingId);
 
         return res.status(200).send(deleted);
     } catch (err) {

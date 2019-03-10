@@ -20,6 +20,16 @@ class BillingService {
 
         return promiseToReturn;
     }
+
+    deleteOneById(id) {
+        const promiseToReturn = new Promise((resolve, reject) => {
+            BillingRepository.deleteOneById(id)
+                .then(deleted => resolve(deleted))
+                .catch(err => reject(err));
+        });
+
+        return promiseToReturn;
+    }
 }
 
 module.exports = new BillingService();

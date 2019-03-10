@@ -11,7 +11,7 @@ const billingSchema = new mongoose.Schema({
         max: 12,
         required: true
     },
-    yaer: {
+    year: {
         type: Number,
         min: 1960,
         max: 2999,
@@ -28,7 +28,11 @@ const billingSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "debt"
         }
-    ]
+    ],
+    created_at: {
+        type: Date,
+        default: Date.now()
+    }
 });
 
 const Billing = mongoose.model("billing", billingSchema);

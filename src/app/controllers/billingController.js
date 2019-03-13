@@ -1,44 +1,15 @@
 const router = require("express").Router();
 const Billing = require("../models/billing");
-const Credit = require("../models/credit");
-const Debt = require("../models/debt");
 
 const BillingService = require("../services/billing_service");
 
 //Create
 router.post("/", async (req, res) => {
     try {
-        const { name, year, month, credits, debts } = req.body;
-
-        const billing = await Billing.create({ name, year, month });
-
-        //Percorrendo créditos para criação
-        if (credits) {
-            await Promise.all(
-                credits.map(async credit => {
-                    const createdCredit = await Credit.create(credit);
-                    billing.credits.push(createdCredit);
-                })
-            );
-        }
-
-        //Percorrendo débitos para criação
-        if (debts) {
-            await Promise.all(
-                debts.map(async debt => {
-                    const createdDebt = await Debt.create(debt);
-                    billing.debts.push(createdDebt);
-                })
-            );
-        }
-
-        //salvando pagamento com os novos creditos
-        await billing.save();
+        const billing = await BillingService.create(req.body);
 
         return res.status(200).send(billing);
     } catch (error) {
-        if (billing) await billing.remove();
-
         return res
             .status(400)
             .send({ error: "Creation failed", message: error.message });
@@ -58,9 +29,7 @@ router.get("/:id", async (req, res) => {
 //Update
 router.put("/:id", async (req, res) => {
     if (!req.params.id) {
-        return res
-            .status(400)
-            .send({ error: "Cant update", message: "id not provided" });
+        return res.status(400).send({ error: "id not provided" });
     }
 
     try {

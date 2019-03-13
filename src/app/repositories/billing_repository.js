@@ -1,9 +1,46 @@
 const Billing = require("../models/billing");
 const Debt = require("../models/debt");
 const Credit = require("../models/credit");
-const mongoose = require("../../database/database");
+
+function isEmptyObject(obj) {
+    return !Object.keys(obj).length;
+}
 
 class BillingRepository {
+    create(billing, credits = {}, debts = {}) {
+        const promiseToReturn = new Promise(async (resolve, reject) => {
+            try {
+                const newBilling = await Billing.create(billing);
+
+                if (!isEmptyObject(credits)) {
+                    await Promise.all(
+                        credits.map(async credit => {
+                            const createdCredit = await Credit.create(credit);
+                            newBilling.credits.push(createdCredit);
+                        })
+                    );
+                }
+
+                if (!isEmptyObject(debts)) {
+                    await Promise.all(
+                        debts.map(async debt => {
+                            const createdDebt = await Debt.create(debt);
+                            newBilling.debts.push(createdDebt);
+                        })
+                    );
+                }
+
+                newBilling.save();
+
+                resolve(newBilling);
+            } catch (err) {
+                reject(err);
+            }
+        });
+
+        return promiseToReturn;
+    }
+
     getList() {
         const promisseToReturn = new Promise((resolve, reject) => {
             try {

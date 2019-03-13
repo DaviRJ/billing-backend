@@ -61,8 +61,8 @@ class BillingRepository {
         const promisseToReturn = new Promise((resolve, reject) => {
             try {
                 const billing = Billing.findById(id)
-                    .populate("debts")
-                    .populate("credits");
+                    .populate("credits")
+                    .populate("debts");
 
                 resolve(billing);
             } catch (err) {
@@ -71,6 +71,21 @@ class BillingRepository {
         });
 
         return promisseToReturn;
+    }
+
+    updateById(id, params) {
+        const promiseToReturn = new Promise((resolve, reject) => {
+            try {
+                const updatedBilling = Billing.findOneAndUpdate(id, params)
+                    .populate("credits")
+                    .populate("debts");
+                resolve(updatedBilling);
+            } catch (err) {
+                reject(err);
+            }
+        });
+
+        return promiseToReturn;
     }
 
     deleteOneById(id) {

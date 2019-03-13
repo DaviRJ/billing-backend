@@ -35,6 +35,16 @@ class BillingService {
         return promiseToReturn;
     }
 
+    updateById(id, params) {
+        const promisseToReturn = new Promise((resolve, reject) => {
+            BillingRepository.updateById(id, params)
+                .then(updatedBilling => resolve(updatedBilling))
+                .catch(err => reject(err));
+        });
+
+        return promisseToReturn;
+    }
+
     deleteOneById(id) {
         const promiseToReturn = new Promise((resolve, reject) => {
             BillingRepository.deleteOneById(id)

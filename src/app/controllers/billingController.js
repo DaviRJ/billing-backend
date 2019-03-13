@@ -33,29 +33,20 @@ router.put("/:id", async (req, res) => {
     }
 
     try {
-        const billingId = req.params.id;
-
-        const updatedBilling = await Billing.findByIdAndUpdate(
-            billingId,
+        const updatedBilling = await BillingService.updateById(
+            req.params.id,
             req.body
-        )
-            .populate("credits")
-            .populate("debts");
-
+        );
         return res.status(200).send(updatedBilling);
     } catch (err) {
-        return res
-            .status(400)
-            .send({ error: "Cant update", message: err.message });
+        return res.status(400).send({ error: err.message });
     }
 });
 
 //Delete
 router.delete("/:id", async (req, res) => {
     if (!req.params.id) {
-        return res
-            .status(400)
-            .send({ error: "Cant delete", message: "id not provided" });
+        return res.status(400).send({ error: "id not provided" });
     }
 
     try {

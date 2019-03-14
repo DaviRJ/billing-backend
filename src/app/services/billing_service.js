@@ -1,4 +1,6 @@
 const BillingRepository = require("../repositories/billing_repository");
+const DebtRepository = require("../repositories/debt_repository");
+const CreditRepository = require("../repositories/credit_repository");
 
 class BillingService {
     create(params) {
@@ -49,6 +51,20 @@ class BillingService {
         const promiseToReturn = new Promise((resolve, reject) => {
             BillingRepository.deleteOneById(id)
                 .then(deleted => resolve(deleted))
+                .catch(err => reject(err));
+        });
+
+        return promiseToReturn;
+    }
+
+    deleteAll() {
+        const promiseToReturn = new Promise((resolve, reject) => {
+            Promise.all([
+                CreditRepository.deleteAll(),
+                DebtRepository.deleteAll(),
+                BillingRepository.deleteAll()
+            ])
+                .then(query => resolve(query))
                 .catch(err => reject(err));
         });
 

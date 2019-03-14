@@ -121,6 +121,19 @@ class BillingRepository {
 
         return promiseToReturn;
     }
+
+    deleteAll() {
+        const promiseToReturn = new Promise((resolve, reject) => {
+            try {
+                const query = Billing.deleteMany({});
+                resolve(query);
+            } catch (err) {
+                reject(err);
+            }
+        });
+
+        return promiseToReturn;
+    }
 }
 
 module.exports = new BillingRepository();

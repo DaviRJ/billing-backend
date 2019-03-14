@@ -60,6 +60,16 @@ router.delete("/:id", async (req, res) => {
     }
 });
 
+router.delete("/delete/all", async (req, res) => {
+    try {
+        const query = BillingService.deleteAll();
+
+        return res.status(200).send({ sucess: query });
+    } catch (err) {
+        return res.status(400).send({ error: err.message });
+    }
+});
+
 //List
 router.get("/", async (req, res) => {
     try {

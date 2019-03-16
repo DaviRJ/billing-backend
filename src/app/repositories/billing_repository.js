@@ -15,8 +15,15 @@ class BillingRepository {
                 if (!isEmptyObject(credits)) {
                     await Promise.all(
                         credits.map(async credit => {
-                            const createdCredit = await Credit.create(credit);
-                            newBilling.credits.push(createdCredit);
+                            try {
+                                const createdCredit = await Credit.create(
+                                    credit
+                                );
+                                newBilling.credits.push(createdCredit);
+                            } catch (err) {
+                                newBilling.remove();
+                                reject(err);
+                            }
                         })
                     );
                 }
@@ -24,8 +31,13 @@ class BillingRepository {
                 if (!isEmptyObject(debts)) {
                     await Promise.all(
                         debts.map(async debt => {
-                            const createdDebt = await Debt.create(debt);
-                            newBilling.debts.push(createdDebt);
+                            try {
+                                const createdDebt = await Debt.create(debt);
+                                newBilling.debts.push(createdDebt);
+                            } catch (err) {
+                                newBilling.remove();
+                                reject(err);
+                            }
                         })
                     );
                 }

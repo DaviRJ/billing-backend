@@ -8,9 +8,7 @@ router.post("/", async (req, res) => {
 
         return res.status(200).send(billing);
     } catch (error) {
-        return res
-            .status(400)
-            .send({ error: "Creation failed", message: error.message });
+        return res.status(400).send({ error: error.message });
     }
 });
 

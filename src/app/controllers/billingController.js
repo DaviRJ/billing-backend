@@ -1,6 +1,4 @@
 const router = require("express").Router();
-const Billing = require("../models/billing");
-
 const BillingService = require("../services/billing_service");
 
 //Create

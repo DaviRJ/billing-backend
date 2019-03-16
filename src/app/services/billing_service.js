@@ -4,12 +4,10 @@ const CreditRepository = require("../repositories/credit_repository");
 
 class BillingService {
     create(params) {
-        const { name, year, month, credits, debts } = params;
-
-        const billingParams = { name, year, month };
+        const { credits, debts, ...billing } = params;
 
         const promiseToReturn = new Promise((resolve, reject) => {
-            BillingRepository.create(billingParams, credits, debts)
+            BillingRepository.create(billing, credits, debts)
                 .then(createdBilling => resolve(createdBilling))
                 .catch(err => reject(err));
         });

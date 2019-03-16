@@ -1,10 +1,7 @@
+const { isEmptyObject } = require("../utils/asp");
 const Billing = require("../models/billing");
 const Debt = require("../models/debt");
 const Credit = require("../models/credit");
-
-function isEmptyObject(obj) {
-    return !Object.keys(obj).length;
-}
 
 class BillingRepository {
     create(billing, credits = {}, debts = {}) {

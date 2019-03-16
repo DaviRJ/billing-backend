@@ -5,7 +5,9 @@
     "author": "Davi Bezerra",
     "license": "MIT",
     "scripts": {
-        "test-integrations": "NODE_ENV=test mocha --timeout 20000 test/integrations",
+        "test": "run-script-os",
+        "test:win32": "set NODE_ENV=test&& mocha --timeout 20000 --recursive",
+        "test:linux:darwin": "NODE_ENV=test mocha --timeout 20000 --recursive",
         "run-dev": "nodemon src/index.js",
         "run-test": "NODE_ENV=test nodemon src/index.js"
     },
@@ -20,6 +22,7 @@
         "chai": "^4.2.0",
         "mocha": "^6.0.2",
         "nodemon": "^1.18.10",
+        "run-script-os": "^1.0.5",
         "supertest": "^4.0.0"
     }
 }

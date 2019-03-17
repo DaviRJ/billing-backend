@@ -85,10 +85,14 @@ class BillingRepository {
         return promisseToReturn;
     }
 
-    updateById(id, params) {
+    updateById(id, params, opts = { new: true }) {
         const promiseToReturn = new Promise((resolve, reject) => {
             try {
-                const updatedBilling = Billing.findOneAndUpdate(id, params)
+                const updatedBilling = Billing.findOneAndUpdate(
+                    id,
+                    params,
+                    opts
+                )
                     .populate("credits")
                     .populate("debts");
                 resolve(updatedBilling);

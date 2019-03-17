@@ -1,4 +1,5 @@
 const mongoose = require("../../database/database");
+const paginate = require("mongoose-paginate");
 
 const billingSchema = new mongoose.Schema({
     name: {
@@ -35,6 +36,7 @@ const billingSchema = new mongoose.Schema({
     }
 });
 
+billingSchema.plugin(paginate);
 const Billing = mongoose.model("billing", billingSchema);
 
 module.exports = Billing;

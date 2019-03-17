@@ -15,10 +15,14 @@ class BillingService {
         return promiseToReturn;
     }
 
-    getList() {
+    getList(opts) {
         const promiseToReturn = new Promise((resolve, reject) => {
-            BillingRepository.getList()
-                .then(billings => resolve(billings))
+            if (!opts.page || !opts.take) {
+                opts = { page: 1, take: 50 };
+            }
+
+            BillingRepository.getList(opts)
+                .then(billings => resolve(billings.docs))
                 .catch(err => reject(err));
         });
 

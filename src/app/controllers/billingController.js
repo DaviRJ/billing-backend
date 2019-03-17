@@ -69,7 +69,8 @@ router.delete("/delete/all", async (req, res) => {
 //List
 router.get("/", async (req, res) => {
     try {
-        const billings = await BillingService.getList();
+        const opts = { ...req.query };
+        const billings = await BillingService.getList(opts);
         return res.status(200).send(billings);
     } catch (err) {
         return res.status(400).send({ error: err.message });

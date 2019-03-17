@@ -50,12 +50,11 @@ class BillingRepository {
         return promiseToReturn;
     }
 
-    getList() {
+    getList(opts) {
+        opts.populate = ["debts", "credits"];
         const promisseToReturn = new Promise((resolve, reject) => {
             try {
-                const billings = Billing.find()
-                    .populate("debts")
-                    .populate("credits");
+                const billings = Billing.paginate({}, opts);
 
                 resolve(billings);
             } catch (err) {

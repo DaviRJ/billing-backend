@@ -8,7 +8,11 @@ const expect = chai.expect;
 const BillingService = require("../../src/app/services/billing_service");
 //Mocks
 const billing = require("../../mocks/billing");
+
+//Variables for tests propurse
 let createdBilling;
+let billingList1;
+let billingList2;
 
 describe("Billings", () => {
     describe("/ POST", () => {
@@ -85,11 +89,76 @@ describe("Billings", () => {
         });
     });
 
+    describe("/:id DELETE", () => {
+        it("Should delete the created billing", done => {
+            request.delete(`/billing/${createdBilling._id}`).end((err, res) => {
+                expect(res.status).to.be.eql(200);
+
+                if (err) {
+                    done(err);
+                }
+
+                request
+                    .get(`/billing/${createdBilling._id}`)
+                    .end((err, res) => {
+                        expect(res.body).to.be.an("object");
+                        expect(res.body).to.be.empty;
+                        done(err);
+                    });
+            });
+        });
+    });
+
     describe("/ GET", () => {
+        before(async () => {
+            await BillingService.deleteAll();
+
+            //Setup first billing
+            billingList1 = { ...billing };
+            billingList1.name = "Teste movimento 1 Lista";
+            //Creating first billing
+            await BillingService.create(billingList1);
+
+            //Setup second billing
+            billingList2 = { ...billing };
+            billingList2.name = "Teste movimento 2 Lista";
+            //Creating second billing
+            await BillingService.create(billingList2);
+        });
+
         it("Should return a list of billings", done => {
             request.get("/billing/").end((err, res) => {
+                //Check the response
                 expect(res.status).be.eql(200);
                 expect(res.body).be.an("array");
+
+                //Check the propertyes
+                expect(res.body.length).to.be.eql(2);
+
+                const billing1 = { ...res.body[0] };
+                const billing2 = { ...res.body[1] };
+
+                expect(billing1).have.property("name");
+                expect(billing2).have.property("name");
+                expect(billing1).have.property("year");
+                expect(billing2).have.property("year");
+                expect(billing1).have.property("month");
+                expect(billing2).have.property("month");
+                expect(billing1).have.property("credits");
+                expect(billing2).have.property("credits");
+                expect(billing1).have.property("debts");
+                expect(billing2).have.property("debts");
+                expect(billing1).have.property("_id");
+                expect(billing2).have.property("_id");
+
+                //Check the values
+                expect(billing1.name).to.be.eql(billingList1.name);
+                expect(billing2.name).to.be.eql(billingList2.name);
+                expect(billing1.year).to.be.eql(billingList1.year);
+                expect(billing2.year).to.be.eql(billingList2.year);
+                expect(billing1.month).to.be.eql(billingList1.month);
+                expect(billing2.month).to.be.eql(billingList2.month);
+
                 done(err);
             });
         });

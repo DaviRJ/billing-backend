@@ -89,6 +89,35 @@ describe("Billings", () => {
         });
     });
 
+    describe("/:id PUT", () => {
+        it("Should update an billing", done => {
+            let { name, year } = { ...createdBilling };
+
+            let toUpdateBilling = { name, year };
+
+            toUpdateBilling.name = "Pagamento alterado";
+            toUpdateBilling.year = 2020;
+
+            request
+                .put(`/billing/${createdBilling._id}`)
+                .send(toUpdateBilling)
+                .end((err, res) => {
+                    //Check response
+                    expect(res.status).be.eql(200);
+                    expect(res.body).to.be.an("object");
+                    //Check Propertyes
+                    expect(res.body).have.property("name");
+                    expect(res.body).have.property("year");
+
+                    //Check values
+                    expect(res.body.name).to.be.eql(toUpdateBilling.name);
+                    expect(res.body.year).to.be.eql(toUpdateBilling.year);
+
+                    done(err);
+                });
+        });
+    });
+
     describe("/:id DELETE", () => {
         it("Should delete the created billing", done => {
             request.delete(`/billing/${createdBilling._id}`).end((err, res) => {
@@ -101,6 +130,7 @@ describe("Billings", () => {
                 request
                     .get(`/billing/${createdBilling._id}`)
                     .end((err, res) => {
+                        expect(res.status).be.eql(200);
                         expect(res.body).to.be.an("object");
                         expect(res.body).to.be.empty;
                         done(err);

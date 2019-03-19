@@ -71,4 +71,4 @@ Este repositório foi feito com o intuito de estudo apenas, mas sinta-se livre p
 
 ## Licença
 
-Este projeto está licenciado com MIT - veja [LICENSE.md](LICENSE.md) file for details
+Este projeto está licenciado com MIT - veja [LICENSE](LICENSE) para mais detalhes.
